@@ -7,14 +7,16 @@ const AppCars = () => {
   useEffect(() => {
     getCars().then(({ data }) => setCars(data));
   }, []);
-  //   postCars("Mercedes", "AMG", 2021, )
+
   return (
     <div>
       {cars.map((car, id) => (
-        <div>
+        <div className="cars" key={id}>
           <p>Model: {car.model}</p>
           <p>Brand: {car.brand}</p>
           <p>Year: {car.year}</p>
+          <hr className="hrC"></hr>
+          <br></br>
         </div>
       ))}
     </div>

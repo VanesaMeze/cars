@@ -1,13 +1,54 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { postCars } from "../service/carsService";
 import { useState } from "react";
 
 const AddCar = () => {
   let years = [];
 
+  const navigate = useNavigate();
+
   for (let i = 1990; i <= 2018; i++) {
     years.push(i);
   }
+
+  const handleInputChange = (event) => {
+    console.log(event.target.checked);
+    const { name, value } = event.target;
+    setState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
+
+  const handleRadioButtonChange = (type) => {
+    setState((prevState) => {
+      return { ...prevState, engine: type };
+    });
+  };
+
+  const handlePreview = () => {
+    const carPreview = `Brand: ${state.brand}\nModel: ${state.model}\nYear: ${state.year}\nMax Speed: ${state.maxSpeed}\nIs automatic: ${state.isAutomatic}\nEngine: ${state.engine}\nNumber of Doors: ${state.numberOfDoors}`;
+    alert(carPreview);
+  };
+
+  const resetInput = () => {
+    setState((prevState) => ({
+      ...prevState,
+      brand: "",
+      model: "",
+      year: 0,
+      maxSpeed: 0,
+      isAutomatic: false,
+      engine: "",
+      numberOfDoors: 0,
+    }));
+  };
 
   const [state, setState] = useState({
     brand: "",
@@ -18,14 +59,6 @@ const AddCar = () => {
     engine: "",
     numberOfDoors: 0,
   });
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
 
   const handleSubmit = (event, state) => {
     event.preventDefault();
@@ -49,16 +82,16 @@ const AddCar = () => {
       engine: "",
       numberOfDoors: 0,
     });
+
+    navigate("/");
   };
 
   return (
     <form
       className="container mt-5"
-      style={{ width: "300px" }}
       onSubmit={(event) => handleSubmit(event, state)}
     >
       <h3 className="label">Add new car:</h3>
-
       <div className="form-floating mt-3">
         <input
           name="brand"
@@ -66,6 +99,7 @@ const AddCar = () => {
           onChange={handleInputChange}
           type="text"
           className="form-control"
+          // required
         />
         <label>Brand</label>
       </div>
@@ -76,6 +110,7 @@ const AddCar = () => {
           onChange={handleInputChange}
           type="text"
           className="form-control"
+          // required
         />
         <label>Model</label>
       </div>
@@ -115,7 +150,12 @@ const AddCar = () => {
           value={state.isAutomatic}
           placeholder="is automatic"
         />
-        <label className="form-check-label" for="isAutomatic">
+        <label
+          className="form-check-label"
+          htmlFor="isAutomatic"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+        >
           {" "}
           Is Automatic
         </label>
@@ -127,25 +167,48 @@ const AddCar = () => {
           Engine type:
         </p>
         <label>
-          <input type="radio" value="diesel" /> Diesel
+          <input
+            type="radio"
+            value="diesel"
+            name="engineRad"
+            onChange={() => handleRadioButtonChange("Diesel")}
+          />{" "}
+          Diesel
         </label>
       </div>
       <div className="radio">
         <label>
-          <input type="radio" value="petrol" /> Petrol
+          <input
+            type="radio"
+            value="petrol"
+            name="engineRad"
+            onChange={() => handleRadioButtonChange("Petrol")}
+          />{" "}
+          Petrol
         </label>
       </div>
       <div className="radio">
         <label>
-          <input type="radio" value="electric" /> Electric
+          <input
+            type="radio"
+            value="electric"
+            name="engineRad"
+            onChange={() => handleRadioButtonChange("Electric")}
+          />{" "}
+          Electric
         </label>
       </div>
       <div className="radio">
         <label>
-          <input type="radio" value="hybrid" /> Hybrid
+          <input
+            type="radio"
+            value="hybrid"
+            name="engineRad"
+            onChange={() => handleRadioButtonChange("Hybrid")}
+          />{" "}
+          Hybrid
         </label>
       </div>
-
       <div className="form-floating mt-3">
         <input
           name="numberOfDoors"
@@ -162,11 +225,30 @@ const AddCar = () => {
         <button
           type="submit"
           onClick={(event) => handleSubmit(event, state)}
-          className="btn btn-outline-dark"
+          className="btn btn-outline-light"
         >
           Add
         </button>
-      </Link>
+      </Link>{" "}
+      <Link to={`/addCar`}>
+        <button
+          type="submit"
+          onClick={() => resetInput(state)}
+          className="btn btn-outline-light"
+        >
+          Reset
+        </button>
+      </Link>{" "}
+      <button
+        type="button"
+        onClick={handlePreview}
+        className="btn btn-outline-info"
+      >
+        Preview
+      </button>
+      <br></br>
+      <br></br>
+      <br></br>
     </form>
   );
 };

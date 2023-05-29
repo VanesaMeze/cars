@@ -1,7 +1,7 @@
 import { API } from "../shared/api";
 
 export const getCars = () => {
-  console.log("U");
+  // console.log("U");
   return API.get("/cars");
 };
 
