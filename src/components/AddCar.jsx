@@ -1,15 +1,38 @@
 import { Link, useNavigate } from "react-router-dom";
-import { postCars } from "../service/carsService";
-import { useState } from "react";
+import { editCarById, postCars } from "../service/carsService";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getCarById } from "../service/carsService";
+
+let years = [];
+
+for (let i = 1990; i <= 2018; i++) {
+  years.push(i);
+}
 
 const AddCar = () => {
-  let years = [];
-
   const navigate = useNavigate();
 
-  for (let i = 1990; i <= 2018; i++) {
-    years.push(i);
-  }
+  const [state, setState] = useState({
+    brand: "",
+    model: "",
+    year: 0,
+    maxSpeed: 0,
+    isAutomatic: false,
+    engine: "",
+    numberOfDoors: 0,
+  });
+
+  const { id } = useParams;
+
+  useEffect(() => {
+    if (id) {
+      getCarById(id).then(({ data }) => {
+        setState(data);
+        console.log(data);
+      });
+    }
+  }, []);
 
   const handleInputChange = (event) => {
     console.log(event.target.checked);
@@ -50,19 +73,19 @@ const AddCar = () => {
     }));
   };
 
-  const [state, setState] = useState({
-    brand: "",
-    model: "",
-    year: 0,
-    maxSpeed: 0,
-    isAutomatic: false,
-    engine: "",
-    numberOfDoors: 0,
-  });
-
   const handleSubmit = (event, state) => {
     event.preventDefault();
     console.log(state.isAutomatic);
+    if (
+      state.engine.length === 0 ||
+      state.year.length === 0 ||
+      state.numberOfDoors === 0 ||
+      state.brand.length < 2 ||
+      state.model.length < 2
+    ) {
+      return alert(`Please fill in the fields`);
+    }
+
     postCars(
       state.brand,
       state.model,
@@ -73,17 +96,21 @@ const AddCar = () => {
       state.numberOfDoors
     );
 
-    setState({
-      brand: "",
-      model: "",
-      year: 0,
-      maxSpeed: 0,
-      isAutomatic: false,
-      engine: "",
-      numberOfDoors: 0,
-    });
+    if (id) {
+      editCarById(id, state);
+    } else {
+      setState({
+        brand: "",
+        model: "",
+        year: 0,
+        maxSpeed: 0,
+        isAutomatic: false,
+        engine: "",
+        numberOfDoors: 0,
+      });
 
-    navigate("/");
+      navigate("/");
+    }
   };
 
   return (

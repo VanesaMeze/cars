@@ -60,8 +60,8 @@ body {
   text-align: center;
   font-size: 5cm;
   white-space: nowrap;
-  color: rgb(0, 0, 0);
-  text-shadow: 2px 2px 4px #383838;
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 2px 4px #c6c6c6;
   letter-spacing: 10px;
   cursor: pointer;
   font-family: Georgia, "Times New Roman", Times, serif;
