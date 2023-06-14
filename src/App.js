@@ -4,6 +4,8 @@ import AppCars from "./components/AppCars";
 import { API } from "./shared/api";
 import Add from "./pages/Add";
 import Home from "./pages/Home";
+// import AddCar from "./components/AddCar";
+import { CarRow } from "./components/CarRow";
 import AddCar from "./components/AddCar";
 
 function App() {
@@ -15,6 +17,7 @@ function App() {
       <Route path="/" element={<Home />}></Route>
       <Route path="cars" element={<AppCars />}></Route>
       <Route path="addCar" element={<Add />}></Route>
+      <Route path="/cars/:id" element={<CarRow />}></Route>
       <Route path="/cars/edit/:id" element={<AddCar />}></Route>
     </Routes>
   );
